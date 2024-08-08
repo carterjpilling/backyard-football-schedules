@@ -1,0 +1,50 @@
+.scheduleComponentContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* To ensure the pseudo-element doesn't overflow */
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.pseudoBackground {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 100px 100px;
+  background-repeat: repeat;
+  opacity: 0.3; /* Adjust opacity here */
+  z-index: -1; /* Ensure it's behind the content */
+}
+
+.bulletinBoard {
+  width: 1000px;
+  height: 500px;
+  box-sizing: border-box;
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  align-items: center;
+  z-index: 1; /* Ensure it's above the pseudo-element */
+}
+
+.team {
+  width: 5rem;
+  margin: 5px;
+}
+
+
+.bannerContainer {
+  width: 500px;
+  height: 100px;
+  background-color: lightblue;
+  border: 10px solid darkblue;
+  margin-bottom: 35px;
+}

@@ -1,0 +1,62 @@
+.teamsComponentContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* To ensure the pseudo-element doesn't overflow */
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.teamsComponentContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      45deg, 
+      transparent, 
+      transparent 70px, 
+      rgba(255, 255, 255, 0.5) 100px, 
+      rgba(255, 255, 255, 0.5) 200px,
+      rgba(182, 81, 81, 0.5) 100px
+    ),
+    url('../public/images/nfl.svg');
+  background-size: 100px 100px;
+  background-repeat: repeat;
+  opacity: 0.3; /* Adjust opacity here */
+  z-index: -1; /* Ensure it's behind the content */
+}
+
+.bulletinBoard {
+  width: 800px;
+  height: 500px;
+  background-color: rgb(170, 138, 78);
+  border: 12px solid darkred;
+  box-sizing: border-box;
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  align-items: center;
+  z-index: 1; /* Ensure it's above the pseudo-element */
+}
+
+.team {
+  width: 5rem;
+  margin: 5px;
+}
+
+
+.bannerContainer {
+  width: 500px;
+  height: 100px;
+  background-color: lightblue;
+  border: 10px solid darkblue;
+  margin-bottom: 35px;
+}
