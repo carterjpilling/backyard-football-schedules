@@ -4,8 +4,10 @@ import { useParams } from "next/navigation";
 import styles from "./styles.module.css";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 type Schedule = {
+  events: [];
   team: {
     id: string;
     abbreviation: string;
@@ -15,7 +17,9 @@ type Schedule = {
     color: string;
     alternateColor: string;
     logo: string;
-    events: [];
+  };
+  week: {
+    number: number;
   };
 };
 
@@ -26,9 +30,8 @@ export default function SchedulePage() {
 
   const params = useParams();
   const searchParams = useSearchParams();
-  // get queries
 
-  // useSearchParams().get("color").replace("#", "");
+  const teamId = schedule?.team.id;
 
   useEffect(() => {
     async function fetchData() {
@@ -46,14 +49,12 @@ export default function SchedulePage() {
     setAlternateColor(searchParams.get("altColor") || "000000");
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.teamid]);
 
-  function setColors() {}
-
   async function fetchSchedule() {
-    console.log(params.teamid);
     const response = await fetch(
-      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${params.teamid}/schedule?season=2024&seasontype=2`
+      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${params.teamid}/schedule?season=2023&seasontype=2`
     );
     return await response.json();
   }
@@ -83,7 +84,88 @@ export default function SchedulePage() {
           border: `10px solid #${mainColor}`,
         }}
       ></div>
-      {/* {schedule.events} */}
+      {schedule?.events.map((event: any, index: number) => {
+        return (
+          <div
+            key={index}
+            className={styles.event}
+            style={{
+              backgroundColor:
+                event.competitions[0].competitors[0].id == teamId
+                  ? "grey"
+                  : "white",
+            }}
+          >
+            <div
+              className={styles.gameNumber}
+              style={{
+                backgroundColor:
+                  event.competitions[0].competitors[0].id == teamId
+                    ? "blue"
+                    : "white",
+              }}
+            >
+              {event.week.number}
+            </div>
+            <div className={styles.opponent}>
+              {event.competitions[0].competitors[0].id == teamId ? (
+                <>
+                  <Image
+                    src={
+                      event.competitions[0].competitors[1].team.logos[0].href
+                    }
+                    alt={
+                      event.competitions[0].competitors[1].team.nickname +
+                      "Logo"
+                    }
+                    height={20}
+                    width={20}
+                  />
+                  {event.competitions[0].competitors[1].team.nickname}
+                </>
+              ) : (
+                <>
+                  <Image
+                    src={
+                      event.competitions[0].competitors[0].team.logos[0].href
+                    }
+                    alt={
+                      event.competitions[0].competitors[0].team.nickname +
+                      "Logo"
+                    }
+                    height={20}
+                    width={20}
+                  />
+                  {event.competitions[0].competitors[0].team.nickname}
+                </>
+              )}
+            </div>
+            <div className={styles.result}>
+              {event.competitions[0].status.type.completed
+                ? event.competitions[0].competitors[0].id == teamId
+                  ? event.competitions[0].competitors[0].winner
+                    ? "W" +
+                      event.competitions[0].competitors[0].score.displayValue +
+                      " - " +
+                      event.competitions[0].competitors[1].score.displayValue
+                    : "L" +
+                      event.competitions[0].competitors[0].score.displayValue +
+                      " - " +
+                      event.competitions[0].competitors[1].score.displayValue
+                  : event.competitions[0].competitors[1].winner
+                  ? "W" +
+                    event.competitions[0].competitors[1].score.displayValue +
+                    " - " +
+                    event.competitions[0].competitors[0].score.displayValue
+                  : "L" +
+                    event.competitions[0].competitors[1].score.displayValue +
+                    " - " +
+                    event.competitions[0].competitors[0].score.displayValue
+                : "- -"}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
