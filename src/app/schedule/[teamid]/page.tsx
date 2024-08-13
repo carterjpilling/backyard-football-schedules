@@ -5,6 +5,8 @@ import styles from "./styles.module.css";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { londrinaOutline, knewwave } from "@/fonts";
+import { londrinaSolid } from "@/fonts";
 
 type Schedule = {
   events: [];
@@ -18,10 +20,50 @@ type Schedule = {
     alternateColor: string;
     logo: string;
   };
+  byeWeek: number;
   week: {
     number: number;
   };
 };
+
+type Color = {
+  mainColor: string;
+};
+
+const teamColorMap = new Map<number, Color>([
+  [22, { mainColor: "#a40227" }],
+  [1, { mainColor: "#A71930" }],
+  [33, { mainColor: "#29126f" }],
+  [2, { mainColor: "#00338D" }],
+  [29, { mainColor: "#0085CA" }],
+  [3, { mainColor: "#e64100" }],
+  [4, { mainColor: "#FB4F14" }],
+  [5, { mainColor: "#472a08" }],
+  [6, { mainColor: "#002a5c" }],
+  [7, { mainColor: "#0a2343" }],
+  [8, { mainColor: "#0076B6" }],
+  [9, { mainColor: "#204e32" }],
+  [34, { mainColor: "#00143f" }],
+  [11, { mainColor: "#003b75" }],
+  [30, { mainColor: "#007487" }],
+  [12, { mainColor: "#E31837" }],
+  [13, { mainColor: "#000000" }],
+  [24, { mainColor: "#0080c6" }],
+  [14, { mainColor: "#003594" }],
+  [15, { mainColor: "#008e97" }],
+  [16, { mainColor: "#4F2683" }],
+  [17, { mainColor: "#002a5c" }],
+  [18, { mainColor: "#D3BC8D" }],
+  [19, { mainColor: "#003c7f" }],
+  [20, { mainColor: "#115740" }],
+  [21, { mainColor: "#06424d" }],
+  [23, { mainColor: "#000000" }],
+  [25, { mainColor: "#aa0000" }],
+  [26, { mainColor: "#002a5c" }],
+  [27, { mainColor: "#bd1c36" }],
+  [10, { mainColor: "#4b92db" }],
+  [28, { mainColor: "#5a1414" }],
+]);
 
 export default function SchedulePage() {
   const [schedule, setSchedule] = useState<Schedule>();
@@ -37,13 +79,17 @@ export default function SchedulePage() {
     async function fetchData() {
       try {
         const schedule = await fetchSchedule();
+        // Add Bye Week to Events List
+        const byeWeekObject = {
+          id: "bye",
+          byeWeek: true,
+        };
+        schedule?.events.splice(schedule.byeWeek - 1, 0, byeWeekObject);
         setSchedule(schedule);
       } catch {
         console.error("Error fetching schedule");
       }
     }
-
-    // setColors();
 
     setMainColor(searchParams.get("color") || "ffffff");
     setAlternateColor(searchParams.get("altColor") || "000000");
@@ -58,6 +104,197 @@ export default function SchedulePage() {
     );
     return await response.json();
   }
+
+  function findTeamColor(teamId: string) {
+    return teamColorMap.get(Number(teamId))?.mainColor;
+  }
+
+  const legendElement = (
+    <div className={`${styles.legendContainer}`}>
+      <div
+        className={`${styles.legendItem} ${styles.win} ${knewwave.className}`}
+      >
+        W
+      </div>
+      <div
+        className={`${styles.legendItem} ${styles.loss} ${knewwave.className}`}
+      >
+        L
+      </div>
+    </div>
+  );
+
+  const headerElement = (
+    <div className={`${styles.headerContainer}`}>
+      <div
+        className={`${styles.gameNumber} ${styles.headerWeek}  ${knewwave.className}`}
+      >
+        wk.
+      </div>
+      <div
+        className={`${styles.opponent} ${styles.headervs}  ${styles.byeWeekText} ${knewwave.className}`}
+      >
+        vs.
+      </div>
+      <div
+        className={`${styles.result}  ${styles.headerScore}  ${knewwave.className}`}
+      >
+        score
+      </div>
+    </div>
+  );
+
+  const scheduleElement = (
+    <>
+      {schedule?.events.map((event: any, index: number) => {
+        return (
+          <>
+            {event?.byeWeek ? (
+              <div className={`${styles.event} ${styles.byeWeek}`}>
+                {" "}
+                <div
+                  className={`${styles.gameNumber} ${knewwave.className} ${styles.gameNumberWhite}  `}
+                >
+                  {schedule.byeWeek}
+                </div>
+                <div
+                  className={`${styles.opponent} ${styles.byeWeekText} ${londrinaSolid.className}`}
+                >
+                  Bye
+                </div>
+                <div className={`${styles.result} ${knewwave.className}`}>
+                  <div className={styles.resultLetter}>- -</div>
+                </div>
+              </div>
+            ) : (
+              <div
+                key={index}
+                className={styles.event}
+                style={{
+                  backgroundColor:
+                    event.competitions[0].competitors[0].id == teamId
+                      ? "#cfcdcc"
+                      : "white",
+                }}
+              >
+                <div
+                  className={`${styles.gameNumber} ${knewwave.className} ${
+                    event.competitions[0].competitors[0].id == teamId
+                      ? styles.gameNumberBlue
+                      : styles.gameNumberWhite
+                  }`}
+                >
+                  {event.week.number}
+                </div>
+                <div
+                  className={`${styles.opponent} ${londrinaOutline.className}`}
+                  style={{
+                    color:
+                      event.competitions[0].competitors[0].id == teamId
+                        ? findTeamColor(event.competitions[0].competitors[1].id)
+                        : findTeamColor(
+                            event.competitions[0].competitors[0].id
+                          ),
+                  }}
+                >
+                  {event.competitions[0].competitors[0].id == teamId ? (
+                    <>
+                      <div className={styles.imageContainer}>
+                        <Image
+                          src={
+                            event.competitions[0].competitors[1].team.logos[0]
+                              .href
+                          }
+                          alt={
+                            event.competitions[0].competitors[1].team.nickname +
+                            "Logo"
+                          }
+                          sizes="100vw"
+                          height={0}
+                          width={0}
+                          style={{ width: "100%", height: "45px" }}
+                        />
+                      </div>
+                      <p className={styles.nickname}>
+                        {event.competitions[0].competitors[1].team.nickname}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className={styles.imageContainer}>
+                        <Image
+                          src={
+                            event.competitions[0].competitors[0].team.logos[0]
+                              .href
+                          }
+                          alt={
+                            event.competitions[0].competitors[0].team.nickname +
+                            "Logo"
+                          }
+                          sizes="100vw"
+                          height={0}
+                          width={0}
+                          style={{ width: "100%", height: "45px" }}
+                        />
+                      </div>
+                      <p className={styles.nickname}>
+                        {event.competitions[0].competitors[0].team.nickname}
+                      </p>
+                    </>
+                  )}
+                </div>
+                <div className={`${styles.result} ${knewwave.className}`}>
+                  {event.competitions[0].status.type.completed ? (
+                    event.competitions[0].competitors[0].id == teamId ? (
+                      event.competitions[0].competitors[0].winner ? (
+                        <>
+                          <span className={styles.resultLetter}>W</span>
+                          {event.competitions[0].competitors[0].score
+                            .displayValue +
+                            " - " +
+                            event.competitions[0].competitors[1].score
+                              .displayValue}{" "}
+                        </>
+                      ) : (
+                        <>
+                          <span className={styles.resultLetter}>L</span>
+                          {event.competitions[0].competitors[0].score
+                            .displayValue +
+                            " - " +
+                            event.competitions[0].competitors[1].score
+                              .displayValue}{" "}
+                        </>
+                      )
+                    ) : event.competitions[0].competitors[1].winner ? (
+                      <>
+                        <span className={styles.resultLetter}>W</span>
+                        {event.competitions[0].competitors[1].score
+                          .displayValue +
+                          " - " +
+                          event.competitions[0].competitors[0].score
+                            .displayValue}{" "}
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.resultLetter}>L</span>
+                        {event.competitions[0].competitors[1].score
+                          .displayValue +
+                          " - " +
+                          event.competitions[0].competitors[0].score
+                            .displayValue}{" "}
+                      </>
+                    )
+                  ) : (
+                    <div className={styles.resultLetter}>- -</div>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
+        );
+      })}
+    </>
+  );
 
   return (
     <div className={styles.scheduleComponentContainer}>
@@ -83,89 +320,22 @@ export default function SchedulePage() {
           backgroundColor: `#${alternateColor}`,
           border: `10px solid #${mainColor}`,
         }}
-      ></div>
-      {schedule?.events.map((event: any, index: number) => {
-        return (
-          <div
-            key={index}
-            className={styles.event}
-            style={{
-              backgroundColor:
-                event.competitions[0].competitors[0].id == teamId
-                  ? "grey"
-                  : "white",
-            }}
-          >
-            <div
-              className={styles.gameNumber}
-              style={{
-                backgroundColor:
-                  event.competitions[0].competitors[0].id == teamId
-                    ? "blue"
-                    : "white",
-              }}
-            >
-              {event.week.number}
+      >
+        {schedule && (
+          <>
+            <div className={`${styles.legendContainer}`}></div>
+            <div className={`${styles.headerWrapper}`}>
+              <div className={`${styles.header} ${styles.headerOne}`}>
+                {headerElement}
+              </div>
+              <div className={`${styles.header} ${styles.headerTwo}`}>
+                {headerElement}
+              </div>
             </div>
-            <div className={styles.opponent}>
-              {event.competitions[0].competitors[0].id == teamId ? (
-                <>
-                  <Image
-                    src={
-                      event.competitions[0].competitors[1].team.logos[0].href
-                    }
-                    alt={
-                      event.competitions[0].competitors[1].team.nickname +
-                      "Logo"
-                    }
-                    height={20}
-                    width={20}
-                  />
-                  {event.competitions[0].competitors[1].team.nickname}
-                </>
-              ) : (
-                <>
-                  <Image
-                    src={
-                      event.competitions[0].competitors[0].team.logos[0].href
-                    }
-                    alt={
-                      event.competitions[0].competitors[0].team.nickname +
-                      "Logo"
-                    }
-                    height={20}
-                    width={20}
-                  />
-                  {event.competitions[0].competitors[0].team.nickname}
-                </>
-              )}
-            </div>
-            <div className={styles.result}>
-              {event.competitions[0].status.type.completed
-                ? event.competitions[0].competitors[0].id == teamId
-                  ? event.competitions[0].competitors[0].winner
-                    ? "W" +
-                      event.competitions[0].competitors[0].score.displayValue +
-                      " - " +
-                      event.competitions[0].competitors[1].score.displayValue
-                    : "L" +
-                      event.competitions[0].competitors[0].score.displayValue +
-                      " - " +
-                      event.competitions[0].competitors[1].score.displayValue
-                  : event.competitions[0].competitors[1].winner
-                  ? "W" +
-                    event.competitions[0].competitors[1].score.displayValue +
-                    " - " +
-                    event.competitions[0].competitors[0].score.displayValue
-                  : "L" +
-                    event.competitions[0].competitors[1].score.displayValue +
-                    " - " +
-                    event.competitions[0].competitors[0].score.displayValue
-                : "- -"}
-            </div>
-          </div>
-        );
-      })}
+          </>
+        )}
+        <div className={`${styles.scheduleWrapper}`}>{scheduleElement}</div>
+      </div>
     </div>
   );
 }
