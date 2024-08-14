@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { londrinaOutline, knewwave } from "@/fonts";
+import { londrinaOutline, knewwave, comicNeue700 } from "@/fonts";
 import { londrinaSolid } from "@/fonts";
 
 type Schedule = {
@@ -100,7 +100,11 @@ export default function SchedulePage() {
 
   async function fetchSchedule() {
     const response = await fetch(
-      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${params.teamid}/schedule?season=2023&seasontype=2`
+      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${params.teamid}/schedule?season=2023&seasontype=2`,
+      {
+        cache: "force-cache",
+        next: { revalidate: 3600 },
+      }
     );
     return await response.json();
   }
@@ -110,16 +114,17 @@ export default function SchedulePage() {
   }
 
   const legendElement = (
-    <div className={`${styles.legendContainer}`}>
-      <div
-        className={`${styles.legendItem} ${styles.win} ${knewwave.className}`}
-      >
-        W
+    <div
+      className={`${styles.legendContainer}`}
+      style={{
+        color: alternateColor == "000000" ? "white" : "black",
+      }}
+    >
+      <div className={`${styles.legendItem} ${knewwave.className}`}>
+        <div className={`${styles.legendBox} ${styles.home}  `}></div>- Home
       </div>
-      <div
-        className={`${styles.legendItem} ${styles.loss} ${knewwave.className}`}
-      >
-        L
+      <div className={`${styles.legendItem} ${knewwave.className}`}>
+        <div className={`${styles.legendBox} ${styles.away}  `}></div>- Away
       </div>
     </div>
   );
@@ -310,9 +315,27 @@ export default function SchedulePage() {
       ), url(${schedule?.team?.logo})`,
         }}
       />
-      <div className={styles.bannerContainer}>
+      <div
+        className={`${styles.bannerContainer} ${comicNeue700.className}`}
+        style={{
+          backgroundColor: `#${mainColor}`,
+          border: `10px solid #${alternateColor}`,
+        }}
+      >
         {" "}
-        {schedule?.team?.displayName} Schedule
+        <h1
+          className={`${styles.bannerTitle}`}
+          style={{
+            WebkitTextStrokeColor: `#${alternateColor}`,
+            color: `#${alternateColor}`,
+            textShadow:
+              alternateColor == "000000"
+                ? "2px 2px 5px #ffffff"
+                : "3px 4px 9px black",
+          }}
+        >
+          {schedule && schedule?.team.abbreviation + " " + "2024 Schedule"}
+        </h1>
       </div>
       <div
         className={styles.bulletinBoard}
@@ -323,7 +346,7 @@ export default function SchedulePage() {
       >
         {schedule && (
           <>
-            <div className={`${styles.legendContainer}`}></div>
+            <div className={`${styles.legendWrapper}`}>{legendElement}</div>
             <div className={`${styles.headerWrapper}`}>
               <div className={`${styles.header} ${styles.headerOne}`}>
                 {headerElement}

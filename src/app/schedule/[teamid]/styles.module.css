@@ -30,7 +30,7 @@
   background-size: cover;
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 4px 5px 10px;
   align-items: center;
   z-index: 1; 
 }
@@ -44,9 +44,27 @@
 .bannerContainer {
   width: 500px;
   height: 100px;
-  background-color: lightblue;
-  border: 10px solid darkblue;
-  margin-bottom: 35px;
+  outline-style: solid;
+  outline-width: 10px; 
+  outline-color: white;
+  margin-bottom: 60px;
+
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+    -content: center;
+}
+
+
+.bannerTitle {
+  margin: 0;
+  font-size: 55px;
+  text-align: center;
+  width: 100%;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: black;
+  text-shadow: 3px 4px 9px black;
+
 }
 
 .byeWeek {
@@ -152,7 +170,36 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+}
 
+.legendBox {
+  height: 20px;
+  width: 20px;
+  box-shadow: 2px 2px 0px black;;
+}
+
+.home {
+  background-color: var(--background-color);
+}
+
+.away {
+  background-color: white;
+}
+
+.legendWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  margin-bottom: 2px;
+}
+
+.legendContainer, .legendItem {
+  display: flex;
+  align-items: center;
+}
+
+.legendItem {
+  margin-right: 10px;
 }
 
 .headerContainer {
