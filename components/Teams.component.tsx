@@ -4,6 +4,8 @@ import Image from "next/image";
 import styles from "./teams.module.css";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import NFLLogo from "../public/images/nfl.png";
+import { comicNeue700 } from "@/fonts";
 
 type Team = {
   team: {
@@ -54,7 +56,17 @@ export default function Teams() {
 
   return (
     <div className={styles.teamsComponentContainer}>
-      <div className={styles.bannerContainer}> NFL Teams</div>
+      <div className={`${styles.bannerContainer} ${comicNeue700.className}`}>
+        <Image
+          src={NFLLogo}
+          alt="NFL Logo"
+          sizes="100vw"
+          height={100}
+          width={0}
+          className={styles.nflLogo}
+        />
+        Backyard NFL
+      </div>
       <div className={styles.bulletinBoard}>
         {nflTeams.map((team: Team, index) => {
           return (
@@ -76,6 +88,7 @@ export default function Teams() {
                   width={0}
                   sizes="100vw"
                   style={{ width: "5rem", height: "auto" }} // optional
+                  className={`${styles.teamLogo}`}
                 />
               </Link>
             </div>

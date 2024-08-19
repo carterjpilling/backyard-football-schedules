@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { londrinaOutline, knewwave, comicNeue700 } from "@/fonts";
 import { londrinaSolid } from "@/fonts";
+import NFLLogo from "../../../../public/images/nfl.png";
+import Link from "next/link";
 
 type Schedule = {
   events: [];
@@ -149,6 +151,19 @@ export default function SchedulePage() {
     </div>
   );
 
+  const NFLLogoElement = (
+    <Link href="/" className={`${styles.nflLogo}`}>
+      <Image
+        src={NFLLogo}
+        alt="NFL Logo"
+        sizes="100vw"
+        height={125}
+        width={0}
+        className={styles.nflLogo}
+      />
+    </Link>
+  );
+
   const scheduleElement = (
     <>
       {schedule?.events.map((event: any, index: number) => {
@@ -158,7 +173,8 @@ export default function SchedulePage() {
               <div className={`${styles.event} ${styles.byeWeek}`}>
                 {" "}
                 <div
-                  className={`${styles.gameNumber} ${knewwave.className} ${styles.gameNumberWhite}  `}
+                  className={`${styles.gameNumber} ${knewwave.className} ${styles.gameNumberWhite}`}
+                  style={{ color: "var(--background-color)" }}
                 >
                   {schedule.byeWeek}
                 </div>
@@ -180,6 +196,10 @@ export default function SchedulePage() {
                     event.competitions[0].competitors[0].id == teamId
                       ? "#cfcdcc"
                       : "white",
+                  color:
+                    event.competitions[0].competitors[0].id == teamId
+                      ? "white"
+                      : "var(--background-color)",
                 }}
               >
                 <div
@@ -344,6 +364,7 @@ export default function SchedulePage() {
           border: `10px solid #${mainColor}`,
         }}
       >
+        {schedule && NFLLogoElement}
         {schedule && (
           <>
             <div className={`${styles.legendWrapper}`}>{legendElement}</div>

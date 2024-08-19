@@ -33,6 +33,7 @@
   padding: 4px 5px 10px;
   align-items: center;
   z-index: 1; 
+  position: relative;
 }
 
 .team {
@@ -212,14 +213,29 @@
 }
 
 .headerWeek {
-  border-right: 2px solid rgb(83, 78, 78, 0.63);
+  border-right: 2px solid grey;
 }
 
 .headerScore {
-  border-left: 2px solid rgba(83, 78, 78, 0.63);
+  border-left: 2px solid grey;
   letter-spacing: 1px;
 }
 
 .headervs, .headerScore {
   font-size: 14px;
+}
+
+.headerWeek, .headerScore, .headervs {
+  color: var(--header-color);
+}
+
+
+.nflLogo {
+  position: absolute;
+  left: 25px;
+  top: -93px;
+}
+
+.nflLogo :hover {
+  transform: scale(1.2);
 }
