@@ -8,6 +8,7 @@
   overflow: hidden; /* To ensure the pseudo-element doesn't overflow */
   box-sizing: border-box;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .pseudoBackground {
@@ -230,12 +231,118 @@
 }
 
 
-.nflLogo {
+.nflLogoDesktopContainer {
   position: absolute;
   left: 25px;
-  top: -93px;
+  top: -180px;
 }
 
-.nflLogo :hover {
+.nflLogoDesktopContainer :hover, .nflLogoMobileContainer  :hover {
   transform: scale(1.2);
+}
+
+.nflLogoMobileContainer {
+  display: none;
+}
+
+
+@media (max-width: 1050px) {
+  .nflLogoDesktopContainer {
+    display: none;
+  }
+
+  .nflLogoMobileContainer {
+    display: block;
+    height: 100px;
+  }
+
+  .nflLogo {
+    height: 100px;
+  }
+
+  .nflLogoLink {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  .bulletinBoard {
+    width: initial;
+    padding: 4px 10px 10px;
+    height: initial;
+    justify-content: space-around;
+    align-content: flex-start;
+  }
+
+  .headerTwo {
+    display: none;
+  }
+
+  .team {
+    width: 4rem;
+    height: 60px;
+    margin: 15px;
+  }
+
+  .bannerContainer {
+    width: 100%;
+    padding: 0px 25px;
+    box-sizing: border-box;
+    height: 100%;
+  }
+
+  .bannerTitle {
+    font-size: 3.5rem;
+  }
+
+  .scheduleComponentContainer {
+    height: 100%;
+  }
+}
+
+@media (max-width: 750px) { 
+  .bannerTitle {
+    font-size: 2.5rem;
+  }
+
+}
+
+
+@media (max-width: 550px) {
+  .event {
+    width: 100%;
+  }
+
+  .scheduleWrapper {
+    width: initial;
+  }
+
+  .header {
+    width: 100%;
+  }
+
+  .opponent {
+    padding: 0px 10px;
+    width: 230px;
+  }
+
+}
+
+@media (max-width: 430px) {
+
+  .result {
+    font-size: 16px;
+  }
+
+  .opponent {
+    font-size: 22px;
+    width: 150px;
+  }
+
+  .bannerContainer {
+    padding: 0px 10px;
+  }
+
 }

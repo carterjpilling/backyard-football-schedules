@@ -8,6 +8,8 @@
   overflow: hidden; /* To ensure the pseudo-element doesn't overflow */
   box-sizing: border-box;
   padding: 20px;
+
+  overflow-y: auto;
 }
 
 .teamsComponentContainer::before {
@@ -36,7 +38,7 @@
 .bulletinBoard {
   width: 800px;
   height: 500px;
-  background-color: #edeef0;
+  background-color: white;
   border: 12px solid rgb(28, 54, 103);
   box-sizing: border-box;
   background-size: cover;
@@ -44,6 +46,7 @@
   flex-wrap: wrap;
   padding: 10px;
   align-items: center;
+  /* margin-bottom: 30px; */
   z-index: 1; /* Ensure it's above the pseudo-element */
 }
 
@@ -51,7 +54,9 @@
   width: 5rem;
   margin: 5px;
   height: 80px;
-  /* border: 1px solid black; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
 }
 
@@ -73,10 +78,9 @@
 .bannerContainer {
   width: 500px;
   height: 125px;
-  background-color: #edeef0;
+  background-color: white;
   border: 10px solid rgb(181, 32, 37);
   margin-bottom: 35px;
-  /* -webkit-text-stroke-color: rgb(230, 65, 0); */
   text-shadow: black 1px 1px 4px;
   font-size: 55px;
   display: flex;
@@ -86,6 +90,38 @@
   box-sizing: border-box;
   -webkit-text-stroke-width: 3px;
   -webkit-text-stroke-color: black;
-/* -webkit-text-stroke-color: #e08ab4;
--webkit-text-stroke-color: rgb(200 100 0); */
+}
+
+
+@media (max-width: 800px) {
+  .teamsComponentContainer {
+    padding: 10px;
+  }
+
+  .bulletinBoard {
+    width: 100%;
+    height: initial;
+    justify-content: space-around;
+    align-content: flex-start;
+  }
+
+  .team {
+    width: 4rem;
+    height: 60px;
+    margin: 15px;
+  }
+
+  .bannerContainer {
+    width: 100%;
+    height: 120px;
+    font-size: 40px;
+  }
+}
+
+
+@media (max-width: 534px) {
+  .teamsComponentContainer {
+    height: 100%;
+    padding-bottom: 30px;
+  }
 }

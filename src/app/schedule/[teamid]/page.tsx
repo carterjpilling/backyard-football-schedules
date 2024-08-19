@@ -119,7 +119,7 @@ export default function SchedulePage() {
     <div
       className={`${styles.legendContainer}`}
       style={{
-        color: alternateColor == "000000" ? "white" : "black",
+        color: "black",
       }}
     >
       <div className={`${styles.legendItem} ${knewwave.className}`}>
@@ -152,14 +152,15 @@ export default function SchedulePage() {
   );
 
   const NFLLogoElement = (
-    <Link href="/" className={`${styles.nflLogo}`}>
+    <Link href="/" className={`${styles.nflLogoLink}`}>
       <Image
         src={NFLLogo}
         alt="NFL Logo"
         sizes="100vw"
-        height={125}
+        height={100}
         width={0}
         className={styles.nflLogo}
+        // style={{ width: "100%", height: "125px" }}
       />
     </Link>
   );
@@ -342,7 +343,9 @@ export default function SchedulePage() {
           border: `10px solid #${alternateColor}`,
         }}
       >
-        {" "}
+        <div className={`${styles.nflLogoMobileContainer}`}>
+          {schedule && NFLLogoElement}
+        </div>{" "}
         <h1
           className={`${styles.bannerTitle}`}
           style={{
@@ -360,11 +363,16 @@ export default function SchedulePage() {
       <div
         className={styles.bulletinBoard}
         style={{
-          backgroundColor: `#${alternateColor}`,
+          backgroundColor:
+            alternateColor == "000000" || alternateColor == "ffffff"
+              ? "lightgrey"
+              : `#${alternateColor}`,
           border: `10px solid #${mainColor}`,
         }}
       >
-        {schedule && NFLLogoElement}
+        <div className={`${styles.nflLogoDesktopContainer}`}>
+          {schedule && NFLLogoElement}
+        </div>
         {schedule && (
           <>
             <div className={`${styles.legendWrapper}`}>{legendElement}</div>
