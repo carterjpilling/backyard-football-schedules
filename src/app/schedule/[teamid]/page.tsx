@@ -102,7 +102,7 @@ export default function SchedulePage() {
 
   async function fetchSchedule() {
     const response = await fetch(
-      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${params.teamid}/schedule?season=2023&seasontype=2`,
+      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${params.teamid}/schedule?season=2024&seasontype=2`,
       {
         cache: "force-cache",
         next: { revalidate: 3600 },
