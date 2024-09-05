@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import NFLLogo from "../public/images/nfl.png";
 import { comicNeue700 } from "@/fonts";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 type Team = {
   team: {
@@ -80,6 +81,12 @@ export default function Teams() {
                   },
                 }}
                 className={styles.teamLink}
+                onClick={() =>
+                  sendGTMEvent({
+                    event: "teamClicked",
+                    value: `${team.team.displayName}`,
+                  })
+                }
               >
                 <Image
                   src={team.team.logos[0].href}
